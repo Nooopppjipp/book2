@@ -17,15 +17,12 @@ namespace Bookrent
         {
             InitializeComponent();
         }
-        public string LoggedUser { get; private set; }
-        // 請務必將此路徑改成您實際的用戶.cs檔路徑
-        /// <summary>
-        /// /////
-        /// </summary>
+        public string? LoggedUser { get; private set; }
+        // 務必確認form6/form7已指定"用戶.cs"檔案路徑!!!!!
         private const string UserFileAbsolutePath = @"C:\Users\User\Desktop\book2\Bookrent\用戶.cs";
-        /// <summary>
-        /// ///
-        /// </summary>
+        //
+
+        //登入功能
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
             var studentId = txtStudentId.Text.Trim();
@@ -61,8 +58,8 @@ namespace Bookrent
                 txtPassword.Focus();
             }
         }
-
-        private void btnRegister_Click(object sender, EventArgs e)
+        //註冊功能
+        private void btnRegister_Click(object sender, EventArgs e)//12-2例外處裡 16-1chatgpt開發
         {
             var studentId = txtStudentId.Text.Trim();
             var password = txtPassword.Text;
@@ -82,10 +79,10 @@ namespace Bookrent
                 return;
             }
 
-            // 同步寫入 UserRepository.cs 檔案
+            // 加入記憶體，本次程式運行即可使用
             UserRepository.Users.Add(new User { StudentId = studentId, Password = password });
 
-            // 3. 立即寫回 用戶.cs 檔案
+            // 寫入用戶.cs 檔案，重開後帳號保留
             try
             {
                 if (!File.Exists(UserFileAbsolutePath))
@@ -94,12 +91,12 @@ namespace Bookrent
                     return;
                 }
 
-                // 讀取整支檔案
+                // 讀取整支檔案進入line，修改line後再覆蓋原檔案
                 var lines = File.ReadAllLines(UserFileAbsolutePath).ToList();
 
                 // 尋找初始化 Users 列表的結尾 "};"
                 int insertIndex = -1;
-                for (int i = 0; i < lines.Count; i++)
+                for (int i = 0; i < lines.Count; i++)//14-4控制項屬性
                 {
                     if (lines[i].Trim() == "};")
                     {
@@ -134,7 +131,7 @@ namespace Bookrent
             txtStudentId.Clear();
             txtPassword.Clear();
         }
-
+        //修改密碼功能
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -142,6 +139,11 @@ namespace Bookrent
             // Form7關閉後再把Form6顯示回來
             form7.FormClosed += (s, args) => this.Show();
             form7.Show();
+        }
+
+        private void Form6_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

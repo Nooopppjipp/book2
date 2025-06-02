@@ -131,6 +131,7 @@
             MaximizeBox = false;
             Name = "Form6";
             Text = "登入";
+            Load += Form6_Load;
             ResumeLayout(false);
             PerformLayout();
         }

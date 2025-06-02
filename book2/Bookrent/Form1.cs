@@ -3,22 +3,27 @@ namespace Bookrent
 {
     public partial class Form1 : Form
     {
-        private readonly string _currentUser;
-        private Form4 _statusForm;
-        private Form5 _notesForm;
-        private Form6 _LogoutForm;
+        //欄位，form1存取並記錄
+        private readonly string _currentUser;//9-3 宣告類別/欄位/屬性
+        private Form4? _statusForm;
+        private Form5? _notesForm;
+        private Form6? _LogoutForm;
+        //_book屬性，讀取BookRepository類別的Books
         private List<Book> _books => BookRepository.Books;
-        public Form1(string currentUser)
+        //改變使用者
+        public Form1(string currentUser)//9-3 存取參數
         {
             InitializeComponent();
             _currentUser = currentUser;
             user.Text = $"歡迎!用戶{_currentUser}";
         }
-        private void Form1_Load(object sender, EventArgs e)
+        //直接顯示DisplayBooks(_books)001
+        private void Form1_Load(object sender, EventArgs e)//13-2 表單載入事件
         {
             DisplayBooks(_books);
         }
-        private void DisplayBooks(IEnumerable<Book> books)
+        //顯示清單
+        private void DisplayBooks(IEnumerable<Book> books) //16-1chatgpt開發
         {
             var data = books.Select(b => new
             {
@@ -31,17 +36,18 @@ namespace Bookrent
 
             dgvBooks.DataSource = data;
         }
-        private void Search_Click(object sender, EventArgs e)
+        //搜尋按鍵
+        private void Search_Click(object sender, EventArgs e)//13-1 按鈕點擊事件處理
         {
-            var query = Txtsearch.Text.Trim();
-            var filtered = _books
-                .Where(b => b.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
-                         || b.Author.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0);
+            //去掉前後空白，根據搜尋內容篩選獲得filtered
+            var query = Txtsearch.Text.Trim();//14-1 trim
+            var filtered = _books.Where(b => b.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
+                                         || b.Author.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0);
             DisplayBooks(filtered);
         }
-        private void Status_Click(object sender, EventArgs e)
+        //顯示form4借閱狀態，避免重覆開啟
+        private void Status_Click(object sender, EventArgs e)//14-2 呼叫其他表單13-1 按鈕點擊事件處理
         {
-            // TODO: 實作 Form4，顯示目前借閱／預約狀態
             if (_statusForm == null || _statusForm.IsDisposed)
             {
                 _statusForm = new Form4(_currentUser, _books);
@@ -52,9 +58,9 @@ namespace Bookrent
                 _statusForm.BringToFront();
             }
         }
-        private void Note_Click(object sender, EventArgs e)
+        //顯示form5注意事項，避免重覆開啟
+        private void Note_Click(object sender, EventArgs e)//14-2 呼叫其他表單13-1 按鈕點擊事件處理
         {
-            // TODO: 實作 Form5，顯示注意事項
             if (_notesForm == null || _notesForm.IsDisposed)
             {
                 _notesForm = new Form5();
@@ -65,10 +71,14 @@ namespace Bookrent
                 _notesForm.BringToFront();
             }
         }
-        private void dgvBooks_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        //雙擊搜尋項目，呼叫form2
+        private void dgvBooks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)//14-2 呼叫其他表單13-1 點擊事件處理
         {
+            //防觸標題列
             if (e.RowIndex < 0) return;
+            //查找點擊列的書名欄
             var title = dgvBooks.Rows[e.RowIndex].Cells["書名"].Value?.ToString();
+            //確定書名不為空
             if (string.IsNullOrEmpty(title)) return;
             var selected = _books.FirstOrDefault(b => b.Title == title);
             if (selected != null)
@@ -77,8 +87,8 @@ namespace Bookrent
                 detailForm.Show();
             }
         }
-
-        private void btnLogout_Click(object sender, EventArgs e)
+        //登出功能，開啟form6並關閉form2~5
+        private void btnLogout_Click(object sender, EventArgs e)//14-2 呼叫其他表單13-1 點擊事件處理
         {
             var openForms = Application.OpenForms.Cast<Form>().ToList();
             foreach (var frm in openForms)
@@ -93,5 +103,7 @@ namespace Bookrent
             _LogoutForm.Show();
             _LogoutForm.FormClosed += (s, args) => this.Close();
         }
+
+       
     }
 }

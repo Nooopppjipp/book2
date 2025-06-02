@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bookrent
 {
+    // 資料模型
     public class Book
     {
         public string Title { get; set; }
@@ -17,12 +18,10 @@ namespace Bookrent
     }
     public static class BookRepository
     {
-        /// <summary>
-        /// 初始書籍清單
-        /// </summary>
+        // 初始書籍清單
         public static List<Book> Books { get; } = new List<Book>
         {
-             new Book { Title = "C#入門",            Author = "張三", IsAvailable = true,  Description = "從零開始學 C# 的最佳入門書" },
+            new Book { Title = "C#入門",            Author = "張三", IsAvailable = true,  Description = "從零開始學 C# 的最佳入門書" },
             new Book { Title = "WinForms實戰",      Author = "李四", IsAvailable = true, Description = "實作專案帶你玩 WinForms" },
             new Book { Title = "資料結構",          Author = "王五", IsAvailable = true, Description = "經典資料結構範例解析" },
             new Book { Title = "演算法分析",        Author = "趙六", IsAvailable = true,  Description = "深入探討演算法複雜度與最佳化策略" },
@@ -43,7 +42,5 @@ namespace Bookrent
             new Book { Title = "Git 使用手冊",       Author = "李一", IsAvailable = true, Description = "版本控制與協作工作流程" },
             new Book { Title = "Azure 雲端",         Author = "王二", IsAvailable = true,  Description = "Azure 雲服務與部署實作" }
         };
-        // 如需更多書籍，可於此處新增
-    };
-    
+    };  
 }

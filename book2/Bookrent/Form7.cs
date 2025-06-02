@@ -12,19 +12,15 @@ namespace Bookrent
 {
     public partial class Form7 : Form
     {
-        // 請確認路徑與專案結構吻合
-        /// <summary>
-        /// ////
-        /// </summary>
+        // 務必確認form6/form7已指定"用戶.cs"檔案路徑!!!!!
         private const string UserFileAbsolutePath = @"C:\Users\User\Desktop\book2\Bookrent\用戶.cs";
-        /// <summary>
-        /// ////
-        /// </summary>
+        //
         public Form7()
         {
             InitializeComponent();
         }
 
+        //確認修改密碼
         private void btnChange_Click(object sender, EventArgs e)
         {
             var account = txtAccount.Text.Trim();
@@ -48,7 +44,7 @@ namespace Bookrent
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-           
+
             // 3. 驗證兩次密碼輸入是否一致
             if (newPwd != confirmPwd)
             {
@@ -58,14 +54,11 @@ namespace Bookrent
                 txtConfirmPassword.Focus();
                 return;
             }
-
-           
-
             // 4. 在記憶體中更新密碼
             targetUser.Password = newPwd;
 
             // 5. 同步寫回 UserRepository.cs 檔案
-            try
+            try//8-5線性搜尋 12-2例外處裡 16-1chatgpt開發
             {
                 if (!File.Exists(UserFileAbsolutePath))
                 {
@@ -97,6 +90,7 @@ namespace Bookrent
                 }
 
                 var originalLine = lines[userLineIndex];
+                //尋找指定行中，"Password = \""的位置
                 int pwdStart = originalLine.IndexOf("Password = \"");
                 if (pwdStart < 0)
                 {
@@ -104,6 +98,7 @@ namespace Bookrent
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                //尋找指定密碼字串的起始雙引號/結束雙引號
                 int quoteStart = originalLine.IndexOf("\"", pwdStart + "Password = ".Length);
                 int quoteEnd = originalLine.IndexOf("\"", quoteStart + 1);
                 if (quoteStart < 0 || quoteEnd < 0)
@@ -116,11 +111,7 @@ namespace Bookrent
                 // 儲存欄位前與欄位後的切段
                 string beforePwd = originalLine.Substring(0, quoteStart + 1);  // 包含前面的 "
                 string afterPwd = originalLine.Substring(quoteEnd);             // 從 結尾 " 開始（包含逗號）
-
                 // 組合新的一行
-                // 例如： beforePwd = '            new User { StudentId = "20250001", Password = "' 
-                //        afterPwd = "\" },"
-                // 新密碼 newPwd = "abcd1234"
                 string newLine = beforePwd + newPwd + afterPwd;
 
                 // 替換該行
@@ -140,7 +131,7 @@ namespace Bookrent
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //取消按鍵
         private void btnCancelChange_Click(object sender, EventArgs e)
         {
             this.Close();

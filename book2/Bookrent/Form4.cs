@@ -12,8 +12,10 @@ namespace Bookrent
 {
     public partial class Form4 : Form
     {
+        //欄位變數
         private string _currentUser;
         private List<Book> _bookList;
+        //加載介面
         public Form4(string currentUser, List<Book> bookList)
         {
             InitializeComponent();
@@ -21,6 +23,7 @@ namespace Bookrent
             _bookList = bookList;
             LoadQueueData();
         }
+        //篩選包含使用者預約的書
         private void LoadQueueData()
         {
             var data = _bookList
@@ -36,6 +39,7 @@ namespace Bookrent
             dgvReservations.DataSource = data;
             lblEmpty.Visible = data.Count == 0;
         }
+        //標籤置中
         private void Form4_Load(object sender, EventArgs e)
         {
             lblEmpty.Left = (this.ClientSize.Width - lblEmpty.Width) / 2;

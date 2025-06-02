@@ -96,7 +96,7 @@
             dgvBooks.RowHeadersWidth = 62;
             dgvBooks.Size = new Size(783, 243);
             dgvBooks.TabIndex = 4;
-            dgvBooks.CellDoubleClick += dgvBooks_CellContentClick;
+            dgvBooks.CellDoubleClick += dgvBooks_CellDoubleClick;
             // 
             // btnLogout
             // 
